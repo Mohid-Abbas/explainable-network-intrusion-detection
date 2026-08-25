@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from pathlib import Path
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+
 from src.config import (
     PROJECT_ROOT,
     RAW_DATA_DIR,
