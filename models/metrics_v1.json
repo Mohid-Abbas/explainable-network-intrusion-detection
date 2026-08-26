@@ -1,0 +1,10 @@
+{
+  "model_type": "xgboost",
+  "macro_f1": 0.9224835900162814,
+  "macro_precision": 0.9300925754020665,
+  "macro_recall": 0.9194416603414137,
+  "roc_auc_macro": 0.9999073379701705,
+  "num_features": 44,
+  "train_size": 1765653,
+  "test_size": 151342
+}
