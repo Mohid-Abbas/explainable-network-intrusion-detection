@@ -1,14 +1,13 @@
-import joblib
+from typing import Any
+
 import numpy as np
-import pandas as pd
 import shap
-from typing import Optional, List, Dict, Any
-from src.config import MODEL_PARAMS, SHAP_CONFIG, MODELS_DIR
-from src.models.boosted_trees import train_xgboost, train_lightgbm
+
+from src.config import SHAP_CONFIG
 
 
 class Explainer:
-    def __init__(self, model, background_data: Optional[np.ndarray] = None, feature_names: Optional[List[str]] = None):
+    def __init__(self, model, background_data: np.ndarray | None = None, feature_names: list[str] | None = None):
         self.model = model
         self.background_data = background_data
         self.feature_names = feature_names or []
@@ -26,7 +25,7 @@ class Explainer:
             shap_values = self.explainer.shap_values(sample[:50])
             self._fitted = True
 
-    def explain_instance(self, x: np.ndarray) -> Dict[str, Any]:
+    def explain_instance(self, x: np.ndarray) -> dict[str, Any]:
         if not self._fitted:
             raise RuntimeError("Explainer not fitted")
         x = x.reshape(1, -1)
@@ -41,7 +40,7 @@ class Explainer:
             features.append({"feature": name, "shap_value": float(vals[idx])})
         return {"top_features": features}
 
-    def global_summary(self, X: np.ndarray, save_path: Optional[str] = None) -> None:
+    def global_summary(self, X: np.ndarray, save_path: str | None = None) -> None:
         if not self._fitted:
             raise RuntimeError("Explainer not fitted")
         shap_values = self.explainer.shap_values(X[:1000])

@@ -1,13 +1,13 @@
-import optuna
+
 import numpy as np
+import optuna
 import pandas as pd
-from typing import Optional
+from sklearn.model_selection import StratifiedKFold, cross_val_score
 from xgboost import XGBClassifier
-from lightgbm import LGBMClassifier
-from sklearn.model_selection import cross_val_score, StratifiedKFold
-from src.config import MODEL_PARAMS, RANDOM_SEED
+
+from src.config import RANDOM_SEED
 from src.models.baseline import train_logistic_regression
-from src.models.boosted_trees import train_xgboost, train_lightgbm
+from src.models.boosted_trees import train_lightgbm, train_xgboost
 
 
 def objective_xgb(trial, X: np.ndarray, y: pd.Series, cv_splits: int = 3) -> float:

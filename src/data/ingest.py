@@ -1,11 +1,12 @@
-import os
 import glob
+import os
+
 import pandas as pd
-from typing import List, Optional
-from src.config import RAW_DATA_DIR, DROP_COLUMNS, TARGET_COLUMN
+
+from src.config import DROP_COLUMNS, RAW_DATA_DIR, TARGET_COLUMN
 
 
-def load_csv_files(file_pattern: str = "*.csv", directory: Optional[str] = None) -> pd.DataFrame:
+def load_csv_files(file_pattern: str = "*.csv", directory: str | None = None) -> pd.DataFrame:
     if directory is None:
         directory = str(RAW_DATA_DIR)
     files = glob.glob(os.path.join(directory, file_pattern))
@@ -20,7 +21,7 @@ def load_csv_files(file_pattern: str = "*.csv", directory: Optional[str] = None)
     return combined
 
 
-def consolidate_cic_ids2017(raw_dir: Optional[str] = None) -> pd.DataFrame:
+def consolidate_cic_ids2017(raw_dir: str | None = None) -> pd.DataFrame:
     if raw_dir is None:
         raw_dir = str(RAW_DATA_DIR)
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -44,7 +45,7 @@ def basic_schema_check(df: pd.DataFrame) -> None:
         raise ValueError(f"Target column '{TARGET_COLUMN}' not found in dataset")
 
 
-def drop_identifier_columns(df: pd.DataFrame, extra_drop: Optional[List[str]] = None) -> pd.DataFrame:
+def drop_identifier_columns(df: pd.DataFrame, extra_drop: list[str] | None = None) -> pd.DataFrame:
     drop_cols = [c for c in DROP_COLUMNS if c in df.columns]
     if extra_drop:
         drop_cols.extend([c for c in extra_drop if c in df.columns])

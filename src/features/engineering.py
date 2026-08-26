@@ -1,9 +1,9 @@
-import pandas as pd
-import numpy as np
-from typing import List, Tuple
-from sklearn.feature_selection import VarianceThreshold
-from sklearn.preprocessing import StandardScaler
 import warnings
+
+import numpy as np
+import pandas as pd
+from sklearn.feature_selection import VarianceThreshold
+
 warnings.filterwarnings("ignore")
 
 

@@ -1,10 +1,11 @@
+
 import numpy as np
 import pandas as pd
-from typing import List, Optional
+
 from src.config import TARGET_COLUMN
 
 
-def handle_infinite_and_nan(df: pd.DataFrame, columns: Optional[List[str]] = None) -> pd.DataFrame:
+def handle_infinite_and_nan(df: pd.DataFrame, columns: list[str] | None = None) -> pd.DataFrame:
     if columns is None:
         columns = df.select_dtypes(include=[np.number]).columns.tolist()
     for col in columns:

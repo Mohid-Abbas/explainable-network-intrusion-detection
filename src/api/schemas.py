@@ -1,4 +1,5 @@
-from typing import Dict, List, Optional, Any
+from typing import Any
+
 from pydantic import BaseModel, Field
 
 
@@ -80,7 +81,7 @@ class PredictRequest(BaseModel):
 
 
 class BatchPredictRequest(BaseModel):
-    flows: List[FlowFeatures]
+    flows: list[FlowFeatures]
 
 
 class TopFeature(BaseModel):
@@ -92,7 +93,7 @@ class PredictResponse(BaseModel):
     prediction: str
     confidence: float
     is_malicious: bool
-    top_features: List[TopFeature]
+    top_features: list[TopFeature]
     model_version: str
 
 
@@ -105,7 +106,7 @@ class HealthResponse(BaseModel):
 
 class ModelInfoResponse(BaseModel):
     model_version: str
-    training_date: Optional[str] = None
-    metrics_summary: Optional[Dict[str, Any]] = None
+    training_date: str | None = None
+    metrics_summary: dict[str, Any] | None = None
 
     model_config = {"protected_namespaces": ()}

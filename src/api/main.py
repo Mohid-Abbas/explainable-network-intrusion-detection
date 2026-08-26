@@ -1,15 +1,16 @@
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
-from typing import Dict, Any, List
+
+from src.api.inference import InferenceEngine
 from src.api.schemas import (
-    PredictRequest,
     BatchPredictRequest,
-    PredictResponse,
     HealthResponse,
     ModelInfoResponse,
+    PredictRequest,
+    PredictResponse,
 )
-from src.api.inference import InferenceEngine
 
 app = FastAPI(title="Explainable Network Intrusion Detection API", version="0.1.0")
 
@@ -59,14 +60,14 @@ def predict(request: PredictRequest) -> PredictResponse:
 
 
 @app.post("/predict/batch")
-def predict_batch(request: BatchPredictRequest) -> List[PredictResponse]:
+def predict_batch(request: BatchPredictRequest) -> list[PredictResponse]:
     results = []
     for flow in request.flows:
         try:
             features = flow.dict(by_alias=False, exclude_unset=True)
             result = engine.predict(features)
             results.append(PredictResponse(**result))
-        except Exception as e:
+        except Exception:
             results.append(PredictResponse(
                 prediction="error",
                 confidence=0.0,

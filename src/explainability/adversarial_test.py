@@ -1,7 +1,7 @@
+from typing import Any
+
 import numpy as np
 import pandas as pd
-from typing import Tuple, Dict, Any, Optional
-from src.models.boosted_trees import train_xgboost, train_lightgbm
 
 
 def feature_perturbation_test(
@@ -10,8 +10,8 @@ def feature_perturbation_test(
     y: pd.Series,
     indices: np.ndarray,
     noise_scale: float = 0.1,
-    feature_range: Optional[Tuple[float, float]] = None,
-) -> Dict[str, Any]:
+    feature_range: tuple[float, float] | None = None,
+) -> dict[str, Any]:
     X_adv = X[indices].copy()
     original_preds = model.predict(X_adv)
     original_proba = model.predict_proba(X_adv)

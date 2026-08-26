@@ -1,33 +1,35 @@
+import json
 import os
 import sys
-import json
+
 import joblib
-import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
 from src.config import (
-    PROJECT_ROOT,
-    RAW_DATA_DIR,
-    PROCESSED_DATA_DIR,
-    MODELS_DIR,
-    FIGURES_DIR,
-    RANDOM_SEED,
-    TARGET_COLUMN,
     DROP_COLUMNS,
+    FIGURES_DIR,
+    MODELS_DIR,
+    RAW_DATA_DIR,
+    TARGET_COLUMN,
 )
-from src.data.ingest import consolidate_cic_ids2017, basic_schema_check
-from src.data.clean import handle_infinite_and_nan, drop_high_null_columns, impute_remaining_nulls, remove_duplicates
-from src.data.preprocess import encode_labels, stratified_split, scale_features
-from src.features.engineering import remove_low_variance_features, remove_highly_correlated_features
-from src.models.boosted_trees import train_xgboost, train_lightgbm
-from src.models.baseline import train_logistic_regression
-from src.models.evaluate import compute_metrics, plot_confusion_matrix
+from src.data.clean import (
+    drop_high_null_columns,
+    handle_infinite_and_nan,
+    impute_remaining_nulls,
+    remove_duplicates,
+)
+from src.data.ingest import basic_schema_check, consolidate_cic_ids2017
+from src.data.preprocess import encode_labels, scale_features, stratified_split
 from src.explainability.shap_explainer import Explainer
+from src.features.engineering import (
+    remove_highly_correlated_features,
+    remove_low_variance_features,
+)
+from src.models.baseline import train_logistic_regression
+from src.models.boosted_trees import train_lightgbm, train_xgboost
+from src.models.evaluate import compute_metrics, plot_confusion_matrix
 
 
 def run_pipeline(model_type: str = "xgboost", use_smote: bool = False):

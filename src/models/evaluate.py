@@ -1,8 +1,9 @@
+from typing import Any
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
-from typing import Optional, Dict, Any
 from sklearn.metrics import (
     classification_report,
     confusion_matrix,
@@ -11,15 +12,14 @@ from sklearn.metrics import (
     recall_score,
     roc_auc_score,
 )
-from src.config import FIGURES_DIR, RANDOM_SEED
 
 
 def compute_metrics(
     y_true: pd.Series,
     y_pred: np.ndarray,
-    y_proba: Optional[np.ndarray] = None,
-    labels: Optional[list] = None,
-) -> Dict[str, Any]:
+    y_proba: np.ndarray | None = None,
+    labels: list | None = None,
+) -> dict[str, Any]:
     report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
     cm = confusion_matrix(y_true, y_pred)
     macro_f1 = f1_score(y_true, y_pred, average="macro", zero_division=0)
@@ -45,7 +45,7 @@ def plot_confusion_matrix(
     cm: np.ndarray,
     labels: list,
     title: str = "Confusion Matrix",
-    save_path: Optional[str] = None,
+    save_path: str | None = None,
 ) -> None:
     plt.figure(figsize=(10, 8))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=labels, yticklabels=labels)
