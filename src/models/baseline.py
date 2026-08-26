@@ -1,8 +1,6 @@
-import joblib
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
-from src.config import MODEL_PARAMS
 
 
 def train_logistic_regression(X_train: np.ndarray, y_train: pd.Series) -> LogisticRegression:

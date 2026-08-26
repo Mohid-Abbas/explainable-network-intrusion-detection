@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
 import pytest
-from src.models.boosted_trees import train_xgboost, train_lightgbm
+
 from src.models.baseline import train_logistic_regression
+from src.models.boosted_trees import train_lightgbm, train_xgboost
 from src.models.evaluate import compute_metrics
 
 

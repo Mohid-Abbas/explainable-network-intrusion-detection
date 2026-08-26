@@ -1,11 +1,10 @@
 import os
-import json
+from typing import Any
+
 import joblib
 import numpy as np
-import pandas as pd
-from typing import Dict, Any, List, Optional
-from src.config import MODELS_DIR, MODEL_PARAMS
-from src.explainability.shap_explainer import Explainer
+
+from src.config import MODELS_DIR
 
 
 class InferenceEngine:
@@ -16,7 +15,7 @@ class InferenceEngine:
         self.model = None
         self.explainer = None
         self.label_encoder = None
-        self.feature_names: List[str] = []
+        self.feature_names: list[str] = []
         self.model_version = "v1"
 
     def load(self) -> None:
@@ -31,7 +30,7 @@ class InferenceEngine:
         if os.path.exists(le_path):
             self.label_encoder = joblib.load(le_path)
 
-    def _dict_to_vector(self, data: Dict[str, Any]) -> np.ndarray:
+    def _dict_to_vector(self, data: dict[str, Any]) -> np.ndarray:
         if not self.feature_names:
             raise RuntimeError("Feature names not set")
         row = []
@@ -44,7 +43,7 @@ class InferenceEngine:
             row.append(val)
         return np.array(row, dtype=np.float32).reshape(1, -1)
 
-    def predict(self, features: Dict[str, Any]) -> Dict[str, Any]:
+    def predict(self, features: dict[str, Any]) -> dict[str, Any]:
         if self.model is None:
             raise RuntimeError("Model not loaded")
         x = self._dict_to_vector(features)

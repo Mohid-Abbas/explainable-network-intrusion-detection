@@ -1,10 +1,20 @@
-import pandas as pd
+
 import numpy as np
-from typing import Tuple, Optional
+import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler, RobustScaler, LabelEncoder
-from src.config import TEST_SIZE, VAL_SIZE, RANDOM_SEED, TARGET_COLUMN, PROCESSED_DATA_DIR
-from src.data.clean import handle_infinite_and_nan, impute_remaining_nulls, remove_duplicates
+from sklearn.preprocessing import LabelEncoder, RobustScaler, StandardScaler
+
+from src.config import (
+    RANDOM_SEED,
+    TARGET_COLUMN,
+    TEST_SIZE,
+    VAL_SIZE,
+)
+from src.data.clean import (
+    handle_infinite_and_nan,
+    impute_remaining_nulls,
+    remove_duplicates,
+)
 from src.data.ingest import drop_identifier_columns
 
 
@@ -17,7 +27,7 @@ def full_clean_pipeline(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def encode_labels(df: pd.DataFrame, target_col: str = TARGET_COLUMN) -> Tuple[pd.DataFrame, LabelEncoder]:
+def encode_labels(df: pd.DataFrame, target_col: str = TARGET_COLUMN) -> tuple[pd.DataFrame, LabelEncoder]:
     le = LabelEncoder()
     df[target_col] = le.fit_transform(df[target_col].astype(str))
     return df, le
@@ -28,7 +38,7 @@ def scale_features(
     X_val: pd.DataFrame,
     X_test: pd.DataFrame,
     scaler_type: str = "robust",
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     if scaler_type == "standard":
         scaler = StandardScaler()
     elif scaler_type == "robust":
@@ -47,7 +57,7 @@ def stratified_split(
     test_size: float = TEST_SIZE,
     val_size: float = VAL_SIZE,
     random_state: int = RANDOM_SEED,
-) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, pd.Series]:
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, pd.Series]:
     X = df.drop(columns=[target_col])
     y = df[target_col]
     X_train, X_temp, y_train, y_temp = train_test_split(
