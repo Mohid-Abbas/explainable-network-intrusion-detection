@@ -13,7 +13,7 @@ pydantic==2.7.4
 streamlit==1.36.0
 python-multipart==0.0.9
 joblib==1.4.2
-matplotlib==3.8.5
+matplotlib>=3.7.0
 seaborn==0.13.2
 plotly==5.22.0
 requests==2.32.3
