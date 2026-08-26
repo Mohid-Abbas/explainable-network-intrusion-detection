@@ -17,6 +17,8 @@ VAL_SIZE = 0.1
 TARGET_COLUMN = "Label"
 DROP_COLUMNS = ["Timestamp", "Flow ID", "Source IP", "Source Port", "Destination IP", "Destination Port"]
 
+COLUMNS_STRIP_WHITESPACE = True
+
 MODEL_PARAMS = {
     "xgboost": {
         "n_estimators": 200,

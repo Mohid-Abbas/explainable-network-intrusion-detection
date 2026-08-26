@@ -14,6 +14,7 @@ def load_csv_files(file_pattern: str = "*.csv", directory: Optional[str] = None)
     frames = []
     for f in files:
         df = pd.read_csv(f, low_memory=False)
+        df.columns = df.columns.str.strip()
         frames.append(df)
     combined = pd.concat(frames, ignore_index=True)
     return combined
@@ -32,6 +33,7 @@ def consolidate_cic_ids2017(raw_dir: Optional[str] = None) -> pd.DataFrame:
     frames = []
     for f in sorted(files):
         df = pd.read_csv(f, low_memory=False)
+        df.columns = df.columns.str.strip()
         frames.append(df)
     combined = pd.concat(frames, ignore_index=True)
     return combined
