@@ -5,7 +5,7 @@
 ![SHAP](https://img.shields.io/badge/SHAP-0.43%2B-orange)
 ![License](https://img.shields.io/badge/MIT-license-lightgrey)
 
-A production-style network intrusion detection system that classifies network traffic as benign or malicious, explains every prediction using SHAP, and demonstrates resilience awareness against adversarial evasion attempts.
+A production-style network intrusion detection system using XGBoost/LightGBM with SHAP explainability, adversarial robustness testing, FastAPI inference, and Streamlit dashboard for real-time SOC threat analysis on CIC-IDS2017.
 
 ## Features
 
@@ -20,19 +20,62 @@ A production-style network intrusion detection system that classifies network tr
 ## Architecture
 
 ```mermaid
-flowchart LR
-    A[Raw CSV Flow Data] --> B[1. Data Ingestion & Cleaning]
-    B --> C[2. Feature Engineering & Preprocessing]
-    C --> D[3. Handle Class Imbalance]
-    D --> E[4. Model Training XGBoost/LightGBM]
-    E --> F[5. Model Evaluation]
-    F --> G[6. Explainability Layer SHAP]
-    G --> H[7. Adversarial Robustness Test]
-    H --> I[8. Model Export .pkl]
-    I --> J[9. Inference API FastAPI]
-    J --> K[10. Dashboard Streamlit]
-    K --> L[11. Dockerize]
-    L --> M[12. Deploy]
+---
+config:
+  layout: elk
+---
+flowchart TD
+    subgraph Data["1. Data Foundation"]
+        direction TB
+        A[/"Raw CSV Flow Data"/]:::data
+        B["Ingestion & Cleaning"]:::process
+        C["Feature Engineering & Preprocessing"]:::process
+        D["Train / Validation / Test Split"]:::process
+        A --> B --> C --> D
+    end
+
+    subgraph Modeling["2. Model Development"]
+        direction TB
+        E["Handle Class Imbalance"]:::model
+        F["Train XGBoost / LightGBM"]:::model
+        G["Evaluate Model"]:::model
+        H{"Meets Quality Threshold?"}:::decision
+        E --> F --> G --> H
+        H -->|No| E
+    end
+
+    subgraph Assurance["3. Model Assurance"]
+        direction TB
+        I["SHAP Explainability"]:::assurance
+        J["Adversarial Robustness Testing"]:::assurance
+        K{"Approve Model Candidate?"}:::decision
+        I --> J --> K
+    end
+
+    subgraph Serving["4. Production Serving"]
+        direction TB
+        L[("Versioned Model Artifact (.pkl)")]:::artifact
+        M["FastAPI Inference Service"]:::serving
+        N["Streamlit Dashboard"]:::serving
+        O["Docker Image"]:::deploy
+        P["Deployment Environment"]:::deploy
+        L --> M --> N --> O --> P
+    end
+
+    D --> E
+    H -->|Yes| I
+    K -->|Yes| L
+    K -->|No| F
+    P -.->|Monitoring and feedback| B
+
+    classDef data fill:#ecfeff,stroke:#22d3ee,color:#164e63
+    classDef process fill:#eef2ff,stroke:#818cf8,color:#312e81
+    classDef model fill:#f5f3ff,stroke:#a78bfa,color:#4c1d95
+    classDef assurance fill:#f0fdf4,stroke:#4ade80,color:#166534
+    classDef decision fill:#fefce8,stroke:#facc15,color:#713f12
+    classDef artifact fill:#fff7ed,stroke:#fb923c,color:#7c2d12
+    classDef serving fill:#fdf4ff,stroke:#e879f9,color:#701a75
+    classDef deploy fill:#f0f9ff,stroke:#38bdf8,color:#0c4a6e
 ```
 
 ## Quick Start
